@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <style type="text/css">
+            .searchable-container{margin:20px 0 0 0}
+            .searchable-container label.btn-default.active{background-color:#007ba7;color:#FFF}
+            .searchable-container label.btn-default{width:90%;border:1px solid #efefef;margin:5px; box-shadow:5px 8px 8px 0 #ccc;}
+            .searchable-container label .bizcontent{width:100%;}
+            .searchable-container .btn-group{width:90%}
+            .searchable-container .btn span.glyphicon{
+                opacity: 0;
+            }
+            .searchable-container .btn.active span.glyphicon {
+                opacity: 1;
+            }
+
+            .top-buffer { margin-top:20px; }
+    </style>
+
+  </head>
+
+    <body>
+
+
+
+<div class="container">
+    <div class="row">
+        <h2>Selecione os atributos que deseja pesquisar</h2>
+        <div class="form-group">
+            <div class="col-sm-12 col-md-12 col-lg-12">
+                <input type="search" class="form-control" name = "search" id="search" placeholder="Escreva uma palavra para servir de filtro">
+            </div>
+        </div>
+    </div>
+    <div class="row top-buffer" >
+         <center>
+        <button onclick="filtrar()" type="button" class="btn btn-primary"><span style="font-size:2.5em;" class="glyphicon glyphicon-filter" aria-hidden="true"></span></button>
+        <button onclick="exibir_todos()" type="button" class="btn btn-primary"><span style="font-size:2.5em;" class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></button>
+        <button onclick=" return cmd()" type="button" class="btn btn-primary"><span style="font-size:2.5em;" class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+         <div id="result"></div>
+        </center>
+    </div>
+    <div class="row">
+        <div class="form-group">
+            <div class="searchable-container">
+
+                {% for att in attributes %}
+                <div class="items col-xs-5 col-sm-5 col-md-3 col-lg-3">
+                    <div class="info-block block-info clearfix">
+                        <div class="square-box pull-left">
+                            <span class="glyphicon glyphicon-tags glyphicon-lg"></span>
+                        </div>
+                        <div data-toggle="buttons" class="btn-group bizmoduleselect">
+                            <label class="btn btn-default">
+                                <div class="bizcontent">
+                                    <input type="checkbox" name="var_id[]" autocomplete="off" value="{{att}}">
+                                    <span class="glyphicon glyphicon-ok glyphicon-lg"></span>
+                                    <h5>{{att}}</h5>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+function filtrar() {
+    var pattern = document.getElementsByName('search')[0].value ;
+    $('.searchable-container .items').hide();
+    $('.searchable-container .items').filter(function() {
+            return $(this).text().match(new RegExp(pattern, 'i'));
+        }).show();
+    window.alert(dadoFiltro);
+    }
+
+function exibir_todos() {
+    var pattern = "";
+    $('.searchable-container .items').hide();
+    $('.searchable-container .items').filter(function() {
+            return $(this).text().match(new RegExp(pattern, 'i'));
+        }).show();
+    }
+
+function cmd() {
+   var checkedItemsAsString = $('[name="var_id[]"]:checked').map(function() { return $(this).val().toString(); } ).get().join(",");
+   var checkedAttributes = checkedItemsAsString.split(',');
+   var rawURL = "http://localhost:5000/resultado?atributosSelecionados="
+   var urlWithParameters = rawURL.concat(checkedItemsAsString)
+   window.location.replace(urlWithParameters)
+}
+
+</script>
+{% endblock %}

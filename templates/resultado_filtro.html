@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+ <!-- INICIO TABELA -->
+<div class="container">
+    <div class="creatediv1 marginTop30">
+      <div class="well text-center">
+            <button type="button" class="btn btn-sky text-uppercase btn-lg"><a href="http://localhost:5000"  style="color: #fff">Realizar nova busca</a></button>
+            <button type="button" class="btn btn-fresh text-uppercase btn-lg"><a href="http://localhost:5000/atributos"  style="color: #fff">Realizar busca com múltiplos atributos</a></button>
+
+        </div>
+        <div class="row margin-top-50">
+          <div class="col-md-12">
+            <div class="panel panel-primary filterable">
+              <div class="panel-heading">
+                <h3 class="panel-title">Informações sobre o dado <span style="color: white; font-weight: bold;"> {{dado}} </span></h3>
+                <div class="pull-right">
+                  <button type="button" class="btn btn-default btn-xs btn-filter"><span class="glyphicon glyphicon-filter"></span> Aplicar Filtros</button>
+                </div>
+              </div>
+              <table class="span12">
+                <table>
+                  <tr class="filters">
+
+                  <th style="width: 677px">
+                    <input type="text" class="form-control" placeholder="Paciente" disabled>
+                  </th>
+                  <th style="width: 670px">
+                    <input type="text" class="form-control" placeholder="Informação" disabled>
+                  </th>
+                  </tr>
+                </table>
+                <div class="bg tablescroll">
+                  <table class="table table-bordered table-striped">
+                  {% for nPatient in range(numberOfPatients) %}
+                    <tr>
+                      </th>
+                      {% if dado in patientInfo[nPatient]%}
+
+                        {% if patientInfo[nPatient][dado].firstChild == None %}
+                        <td style="width: 49.8%"><a href= "{{ "http://localhost:5000/paciente/" ~ nPatient }}"> {{nPatient}}</a></th>
+                        <td style="width: 48%;color:#3498db">Informação não preenchida</th>
+                        {% endif %}
+
+                        {% if patientInfo[nPatient][dado].firstChild != None  %}
+                        <td style="width: 49.8%"><a href= "{{ "http://localhost:5000/paciente/" ~ nPatient }}"> {{nPatient}}</a></th>
+                        <td style="width: 48%">{{patientInfo[nPatient][dado].firstChild.data}}</th>
+                        {% endif %}
+
+                    {% endif %}
+
+                    {% if dado not in patientInfo[nPatient]%}
+                        <td style="width: 49.8%"><a href= "{{ "http://localhost:5000/paciente/" ~ nPatient }}"> {{nPatient}}</a></th>
+                        <td style="width: 48%;color:#e74c3c">Não possui essa informação</th>
+
+                    {% endif %}
+                    </tr>
+                  {% endfor %}
+                  </table>
+                </div>
+              </table>
+            </div>
+          </div>
+        </div>
+
+</div>
+ <!-- FIM TABELA -->
+
+{% endblock %}
