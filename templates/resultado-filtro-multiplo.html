@@ -19,40 +19,41 @@
                   <button type="button" class="btn btn-default btn-xs btn-filter"><span class="glyphicon glyphicon-filter"></span> Aplicar Filtros</button>
                 </div>
               </div>
-              <table class="span12">
+
+                <div class="bg tablescroll">
+                              <table class="span12">
                 <table>
                   <tr class="filters">
-                <th style="width: 100px">
+                <th style="width: {{1108/request.args.get('atributosSelecionados', '').split(',')|length}}px">
                 <input type="text" class="form-control" placeholder="Paciente" disabled>
                 </th>
                 {% for attName in request.args.get('atributosSelecionados', '').split(',') %}
-                  <th style="width: 150px">
+                  <th style="width: {{1108/request.args.get('atributosSelecionados', '').split(',')|length}}px">
                     <input type="text" class="form-control" placeholder={{attName}} disabled>
                   </th>
                 {% endfor %}
 
                   </tr>
                 </table>
-                <div class="bg tablescroll">
                   <table class="table table-bordered table-striped">
                   {% for nPatient in range(numberOfPatients) %}
                   <tr>
-                  <td style="width: 100px"><a href= "{{ "http://localhost:5000/paciente/" ~ nPatient }}"> {{nPatient}}</a></th>
+                  <td style="width: {{1108/request.args.get('atributosSelecionados', '').split(',')|length}}px"><a href= "{{ "http://localhost:5000/paciente/" ~ nPatient }}"> {{nPatient}}</a></th>
                     {% for dado in request.args.get('atributosSelecionados', '').split(',') %}
                         {% if dado in patientInfo[nPatient]%}
 
                             {% if patientInfo[nPatient][dado].firstChild == None %}
-                            <td style="width: 180px;color:#3498db">Informação não preenchida</th>
+                            <td style="width: {{1108/request.args.get('atributosSelecionados', '').split(',')|length}}px;color:#3498db">Informação não preenchida</th>
                             {% endif %}
 
                             {% if patientInfo[nPatient][dado].firstChild != None  %}
-                            <td style="width: 180px">{{patientInfo[nPatient][dado].firstChild.data}}</th>
+                            <td style="width: {{1108/request.args.get('atributosSelecionados', '').split(',')|length}}px">{{patientInfo[nPatient][dado].firstChild.data}}</th>
                             {% endif %}
 
                         {% endif %}
 
                         {% if dado not in patientInfo[nPatient]%}
-                            <td style="width: 180px;color:#e74c3c">Não possui essa informação</th>
+                            <td style="width: {{1108/request.args.get('atributosSelecionados', '').split(',')|length}}px;color:#e74c3c">Não possui essa informação</th>
 
                         {% endif %}
 
