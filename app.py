@@ -38,12 +38,13 @@ for k in range(0,len(patientInfo)):
 
 for att in attributes:
     for i in range(0,len(patientInfo)):
-        for j in range(0,len(patientInfo)):
+        for j in range(i,len(patientInfo)):
             if(att in patientInfo[i] and att in patientInfo[j]):
                 if (patientInfo[i][att].firstChild != None and patientInfo[j][att].firstChild != None):
                     if (patientInfo[i][att].firstChild.data == patientInfo[j][att].firstChild.data):    
-                        p_similarity[i][j].append(att)
-                        att_similarity[i][j].append(patientInfo[i][att].firstChild.data)
+                        if(att not in p_similarity[i][j]):
+                            p_similarity[i][j].append(att)
+                            att_similarity[i][j].append(patientInfo[i][att].firstChild.data)
 
 
 
@@ -152,13 +153,10 @@ import os
 from json import dumps
 
 app = Flask("cern")
-@app.route("/")
-def load_index():
-    return render_template("index.html", attributes = attributes,c = 0,numberOfPatients =numberOfPatients)
 
-@app.route("/atributos")
+@app.route("/")
 def selecionar_atributos():
-    return render_template("atributos.html",attributes = friendlyAttributes,Groupdata = Groupdata)
+    return render_template("atributos.html",attributes = friendlyAttributes,Groupdata = Groupdata,numberOfPatients =numberOfPatients,c=0)
 
 @app.route("/paciente/<int:patient_id>")
 def html_page(patient_id):
@@ -174,7 +172,7 @@ def resultado():
     return render_template("resultado-filtro-multiplo.html",patientInfo = patientInfo,numberOfPatients= numberOfPatients)
 
 
-@app.route('/similaridade/')
+@app.route('/comparacao')
 def similarity():
     return render_template("similaridade.html",att_similarity = att_similarity,p_similarity = p_similarity ,c=2)
 

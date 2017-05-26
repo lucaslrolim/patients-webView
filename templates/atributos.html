@@ -25,8 +25,43 @@
 
 
 <div class="container">
+                                <form class="form-horizontal" role="form">
+                                     <h2> Busca de pacientes</h2>
+                              <div class="form-group">
+                                    <label for="contain">Número do Paciente</label>
+                                    <p>Caso você deseje visualizar informações específicas de um paciente, deve selecionar o número do paciente no menu de seleção abaixo e clicar no botão <b>Buscar informações do paciente</b></p>
+                                      <select name="paciente" class="form-control">
+                                        {% for i in range(numberOfPatients) %}
+                                        <option>{{i}}</option>
+                                        {% endfor %}
+                                    </select>
+                              </div>
+                             <div class="form-group">
+                                    <label for="contain">Realizar comparação entre pacientes</label>
+                                    <p>Você também pode utilizar os campos abaixo e o botão de <b>Comparação de pacientes</b> para analisar quantos atributos dois pacientes possuem em comum e quais são esses atributos.</b></p>
+                                    <p>Paciente 1 para a comparação</p>
+                                    <select name="paciente1" class="form-control">
+                                        {% for i in range(numberOfPatients) %}
+                                        <option>{{i}}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <p>Paciente 2 para a comparação</p>
+                                    <select name="paciente2" class="form-control">
+                                        {% for i in range(numberOfPatients) %}
+                                        <option>{{i}}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <br>
+                              </div>
+                              <div class="well text-center">
+                              <button onclick="buscar()"  type="button" class="btn btn-hot text-uppercase">Buscar informações do paciente</button>
+                              <button onclick=" return cmd2()"type="button" class="btn btn-sky text-uppercase"><a style="color: #fff">Comparar pacientes</a></button>
+                              </div>
+                                </form>
     <div class="row">
-        <h2>Selecione os atributos que deseja pesquisar</h2>
+        <h2>Busca por atributos</h2>
+        <p>Utilizando os campos abaixo você pode buscar por atributos específicos que deseja analisar dos pacientes. Basta apenas selecionar os atributos que deseja visualziar e <b>clicar noícone da lupa de busca azul</b> </p>
+        <p>Caso esteja com dificuldade, é possível usar o filtro de atributos. Batsa digitar o nome do atributo que deseja, clicar e clciar no ícone do filtro. Para visualizar todos os atributos novamente basta clicar no ícone de visualização, representado por um olho.</p>
         <div class="form-group">
             <div class="col-sm-12 col-md-12 col-lg-12">
                 <input type="search" class="form-control" name = "search" id="search" placeholder="Escreva uma palavra para servir de filtro">
@@ -74,23 +109,10 @@
 <script>
 
 function buscar() {
-      var infoDesejada = document.getElementsByName('infoDesejada')[0].value ;
-      if (infoDesejada == "paciente") {
-        var dadoFiltro = document.getElementsByName('dado')[0].value ;
-        var dado = String(dadoFiltro)
-        var resultUrl = "http://localhost:5000/";
-        var url = resultUrl.concat(infoDesejada);
-        url = url.concat("/")
-        url = url.concat(dado);
-        window.location.replace(url)
-      }
-      if (infoDesejada != "paciente") {
-        var resultUrl = "http://localhost:5000/";
-        var url = resultUrl.concat("filtro");
-        url = url.concat("/")
-        url = url.concat(infoDesejada);
-        window.location.replace(url)
-      }
+   var patient = $('[name="paciente"]').map(function() { return $(this).val().toString(); } ).get().join(",");
+   var rawURL = "http://localhost:5000/paciente/"
+   var urlWithParameters = rawURL.concat(patient)
+   window.location.replace(urlWithParameters)
 
 }
 
@@ -118,6 +140,16 @@ function cmd() {
    var rawURL = "http://localhost:5000/resultado?atributosSelecionados="
    var urlWithParameters = rawURL.concat(checkedItemsAsString)
    window.location.replace(urlWithParameters)
+}
+
+function cmd2() {
+   var patient1 = $('[name="paciente1"]').map(function() { return $(this).val().toString(); } ).get().join(",");
+   var patient2 = $('[name="paciente2"]').map(function() { return $(this).val().toString(); } ).get().join(",");
+   var rawURL = "http://localhost:5000/comparacao?pacientes="
+   var urlWithParameters1 = rawURL.concat(patient1)
+   var urlWithParameters2 = urlWithParameters1.concat(","+patient2)
+
+   window.location.replace(urlWithParameters2)
 }
 
 </script>
